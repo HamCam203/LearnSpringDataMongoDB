@@ -4,8 +4,8 @@ import java.util.Date;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "faceSnap")
-public class FaceSnaps {
+@Document(collection = "facesnaps")
+public class Face {
 
     @Id
     private String id;
@@ -65,10 +65,10 @@ public class FaceSnaps {
     }
 
     // 🎯 Constructeur par défaut
-    public FaceSnaps() {}
+    public Face() {}
 
     // 🎯 Constructeur avec paramètres
-    public FaceSnaps(String title, String description, String imageUrl, Date createdAt, int snaps) {
+    public Face(String title, String description, String imageUrl, Date createdAt, int snaps) {
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
