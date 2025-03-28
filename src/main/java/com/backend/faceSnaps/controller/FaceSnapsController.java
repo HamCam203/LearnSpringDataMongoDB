@@ -17,9 +17,21 @@ public class FaceSnapsController {
     private FaceSnapsRepository faceSnapsRepository;
 
     // Endpoint pour récupérer tous les FaceSnaps
+    // Endpoint pour récupérer tous les FaceSnaps
     @GetMapping
     public List<Face> getAllFaceSnaps() {
         return faceSnapsRepository.findAll();
+    }
+
+    // Endpoint pour récupérer un FaceSnap par ID
+    @GetMapping("/{id}")
+    public Face getFaceSnapById(@PathVariable("id") String id) {
+        Optional<Face> face = faceSnapsRepository.findById(id);
+        if (face.isPresent()) {
+            return face.get();  // Renvoie l'objet Face si trouvé
+        } else {
+            throw new RuntimeException("FaceSnap not found with id " + id);  // Gérer l'erreur si l'id est invalide
+        }
     }
 
     @PutMapping("/{id}")
