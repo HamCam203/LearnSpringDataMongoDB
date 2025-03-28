@@ -22,19 +22,21 @@ public class FaceSnapsController {
         return faceSnapsRepository.findAll();
     }
 
-    // Endpoint pour mettre à jour le nombre de snaps d'un FaceSnap
     @PutMapping("/{id}")
     public Face updateFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
         Optional<Face> existingFaceSnap = faceSnapsRepository.findById(id);
-        
+    
         if (existingFaceSnap.isPresent()) {
             Face face = existingFaceSnap.get();
-            // Augmenter le nombre de snaps
-            face.setSnaps(face.getSnaps() + 1);
-            // Sauvegarder l'objet mis à jour dans la base de données
+    
+            // Utiliser directement la valeur envoyée par Angular
+            face.setSnaps(updatedFace.getSnaps());
+    
             return faceSnapsRepository.save(face);
         } else {
-            throw new RuntimeException("FaceSnap not found with id " + id); // Gérer l'erreur si l'id est invalide
+            throw new RuntimeException("FaceSnap not found with id " + id);
         }
     }
+    
+    
 }
