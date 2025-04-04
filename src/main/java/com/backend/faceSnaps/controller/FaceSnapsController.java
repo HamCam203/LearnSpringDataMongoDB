@@ -67,4 +67,19 @@ public class FaceSnapsController {
         return ResponseEntity.status(HttpStatus.CREATED)  // Retourne un code 201 pour la création
                 .body(savedFace);  // Retourne le FaceSnap créé
     }
+
+    // Endpoint pour supprimer un FaceSnap par ID
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFaceSnap(@PathVariable("id") String id) {
+        Optional<Face> face = faceSnapsRepository.findById(id);
+        
+        if (face.isPresent()) {
+            faceSnapsRepository.delete(face.get());  // Supprimer le FaceSnap trouvé
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)  // Code 204 pour suppression réussie sans contenu
+                    .body("FaceSnap supprimé avec succès");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)  // Retourne une erreur 404 si le FaceSnap n'est pas trouvé
+                    .body("FaceSnap non trouvé avec l'id " + id);
+        }
+    }
 }
