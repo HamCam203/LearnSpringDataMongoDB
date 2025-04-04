@@ -11,7 +11,8 @@ public class Face {
     private String id;
     private String title;
     private String description;
-    private String imageUrl;
+    private String imageUrl; // URL de l'image (optionnel)
+    private String imageBase64; // Image en base64 (optionnel)
     private Date createdAt;
     private int snaps;
 
@@ -48,6 +49,14 @@ public class Face {
         this.imageUrl = imageUrl;
     }
 
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -68,10 +77,11 @@ public class Face {
     public Face() {}
 
     // 🎯 Constructeur avec paramètres
-    public Face(String title, String description, String imageUrl, Date createdAt, int snaps) {
+    public Face(String title, String description, String imageUrl, String imageBase64, Date createdAt, int snaps) {
         this.title = title;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.imageBase64 = imageBase64;
         this.createdAt = createdAt;
         this.snaps = snaps;
     }
@@ -84,6 +94,7 @@ public class Face {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", imageBase64='" + imageBase64 + '\'' +
                 ", createdAt=" + createdAt +
                 ", snaps=" + snaps +
                 '}';

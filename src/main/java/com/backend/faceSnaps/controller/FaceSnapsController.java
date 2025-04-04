@@ -3,8 +3,11 @@ package com.backend.faceSnaps.controller;
 import com.backend.faceSnaps.model.Face;
 import com.backend.faceSnaps.repository.FaceSnapsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +20,6 @@ public class FaceSnapsController {
     private FaceSnapsRepository faceSnapsRepository;
 
     // Endpoint pour récupérer tous les FaceSnaps
-    // Endpoint pour récupérer tous les FaceSnaps
     @GetMapping
     public List<Face> getAllFaceSnaps() {
         return faceSnapsRepository.findAll();
@@ -25,30 +27,44 @@ public class FaceSnapsController {
 
     // Endpoint pour récupérer un FaceSnap par ID
     @GetMapping("/{id}")
-    public Face getFaceSnapById(@PathVariable("id") String id) {
+    public ResponseEntity<Face> getFaceSnapById(@PathVariable("id") String id) {
         Optional<Face> face = faceSnapsRepository.findById(id);
         if (face.isPresent()) {
-            return face.get();  // Renvoie l'objet Face si trouvé
+            return ResponseEntity.ok(face.get());  // Retourne une réponse 200 avec l'objet Face
         } else {
-            throw new RuntimeException("FaceSnap not found with id " + id);  // Gérer l'erreur si l'id est invalide
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);  // Retourne une erreur 404 si le FaceSnap n'est pas trouvé
         }
     }
 
+    // Endpoint pour mettre à jour un FaceSnap par ID
     @PutMapping("/{id}")
-    public Face updateFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
+    public ResponseEntity<Face> updateFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
         Optional<Face> existingFaceSnap = faceSnapsRepository.findById(id);
-    
+        
         if (existingFaceSnap.isPresent()) {
             Face face = existingFaceSnap.get();
-    
-            // Utiliser directement la valeur envoyée par Angular
+            
+            // Mettre à jour uniquement le nombre de snaps
             face.setSnaps(updatedFace.getSnaps());
-    
-            return faceSnapsRepository.save(face);
+            faceSnapsRepository.save(face);  // Sauvegarde de la photo mise à jour
+            
+            return ResponseEntity.ok(face);  // Retourne l'objet Face mis à jour avec une réponse 200
         } else {
-            throw new RuntimeException("FaceSnap not found with id " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);  // Retourne une erreur 404 si le FaceSnap n'est pas trouvé
         }
     }
-    
-    
+
+    // Endpoint pour créer un nouveau FaceSnap
+    @PostMapping
+    public ResponseEntity<Face> createFaceSnap(@RequestBody Face newFace) {
+        // Assurez-vous que MongoDB gère l'ID automatiquement
+        newFace.setId(null); // L'ID doit être null lors de la création du document
+        newFace.setCreatedAt(new Date());  // Définir la date de création
+        
+        Face savedFace = faceSnapsRepository.save(newFace);  // Sauvegarde le nouveau FaceSnap
+        return ResponseEntity.status(HttpStatus.CREATED)  // Retourne un code 201 pour la création
+                .body(savedFace);  // Retourne le FaceSnap créé
+    }
 }
