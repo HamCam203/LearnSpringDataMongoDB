@@ -82,4 +82,24 @@ public class FaceSnapsController {
                     .body("FaceSnap non trouvé avec l'id " + id);
         }
     }
+    @PatchMapping("/{id}")
+    public ResponseEntity<Face> editFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
+        Optional<Face> existingFaceSnap = faceSnapsRepository.findById(id);
+
+        if (existingFaceSnap.isPresent()) {
+            Face face = existingFaceSnap.get();
+
+            // Mettre à jour les champs éditables uniquement
+            face.setTitle(updatedFace.getTitle());
+            face.setDescription(updatedFace.getDescription());
+            face.setImageUrl(updatedFace.getImageUrl());
+            face.setImageBase64(updatedFace.getImageBase64());
+
+            Face savedFace = faceSnapsRepository.save(face);
+            return ResponseEntity.ok(savedFace);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
 }
