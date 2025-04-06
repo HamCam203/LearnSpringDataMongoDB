@@ -39,22 +39,26 @@ public class FaceSnapsController {
 
     // Endpoint pour mettre à jour un FaceSnap par ID
     @PutMapping("/{id}")
-    public ResponseEntity<Face> updateFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
+    public ResponseEntity<Face> updateOrEditFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
         Optional<Face> existingFaceSnap = faceSnapsRepository.findById(id);
         
         if (existingFaceSnap.isPresent()) {
             Face face = existingFaceSnap.get();
-            
-            // Mettre à jour uniquement le nombre de snaps
+    
+            // Met à jour tous les champs
             face.setSnaps(updatedFace.getSnaps());
-            faceSnapsRepository.save(face);  // Sauvegarde de la photo mise à jour
-            
-            return ResponseEntity.ok(face);  // Retourne l'objet Face mis à jour avec une réponse 200
+            face.setTitle(updatedFace.getTitle());
+            face.setDescription(updatedFace.getDescription());
+            face.setImageUrl(updatedFace.getImageUrl());
+            face.setImageBase64(updatedFace.getImageBase64());
+    
+            faceSnapsRepository.save(face);
+            return ResponseEntity.ok(face);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(null);  // Retourne une erreur 404 si le FaceSnap n'est pas trouvé
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    
 
     // Endpoint pour créer un nouveau FaceSnap
     @PostMapping
@@ -80,25 +84,6 @@ public class FaceSnapsController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)  // Retourne une erreur 404 si le FaceSnap n'est pas trouvé
                     .body("FaceSnap non trouvé avec l'id " + id);
-        }
-    }
-    @PatchMapping("/{id}")
-    public ResponseEntity<Face> editFaceSnap(@PathVariable("id") String id, @RequestBody Face updatedFace) {
-        Optional<Face> existingFaceSnap = faceSnapsRepository.findById(id);
-
-        if (existingFaceSnap.isPresent()) {
-            Face face = existingFaceSnap.get();
-
-            // Mettre à jour les champs éditables uniquement
-            face.setTitle(updatedFace.getTitle());
-            face.setDescription(updatedFace.getDescription());
-            face.setImageUrl(updatedFace.getImageUrl());
-            face.setImageBase64(updatedFace.getImageBase64());
-
-            Face savedFace = faceSnapsRepository.save(face);
-            return ResponseEntity.ok(savedFace);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
