@@ -5,9 +5,13 @@ Ce projet sert d'API pour gérer des "FaceSnaps", permettant de créer, récupé
 
 ## 🚀 Fonctionnalités
 
-- 📌 **Gestion des FaceSnaps** : Récupération et mise à jour des snaps.
-- 🔄 **Mise à jour des snaps** : Incrémentation du nombre de snaps d’un FaceSnap.
-- 🌍 **CORS configuré** : Communication fluide entre Angular (frontend) et Spring Boot (backend).
+- 📌 **Gestion complète des FaceSnaps** :
+  - Création
+  - Récupération (tous / par ID)
+  - Mise à jour complète
+  - Suppression
+- 🔄 **Mise à jour dynamique des données**
+- 🌍 **CORS activé** : Interaction fluide avec un frontend Angular (port 4200)
 
 ## 📂 Structure du projet
 ```
@@ -38,13 +42,15 @@ faceSnaps-backend/
 - **Spring Data MongoDB** pour les opérations CRUD
 - **Spring Web** pour les APIs REST
 
+## 📡 API Endpoints
 
-## 📡 Endpoints API
-
-| Méthode | Endpoint               | Description                      |
-|---------|------------------------|----------------------------------|
-| `GET`   | `/api/facesnaps`       | Récupérer tous les FaceSnaps    |
-| `PUT`   | `/api/facesnaps/{id}`  | Mettre à jour un FaceSnap       |
+| Méthode | Endpoint                | Description                                 |
+|---------|-------------------------|---------------------------------------------|
+| `GET`   | `/api/facesnaps`        | 🔍 Récupérer tous les FaceSnaps              |
+| `GET`   | `/api/facesnaps/{id}`   | 🔍 Récupérer un FaceSnap par son ID          |
+| `POST`  | `/api/facesnaps`        | ➕ Créer un nouveau FaceSnap                 |
+| `PUT`   | `/api/facesnaps/{id}`   | ✏️ Mettre à jour un FaceSnap existant        |
+| `DELETE`| `/api/facesnaps/{id}`   | 🗑️ Supprimer un FaceSnap par son ID          |
 
 ## 🔧 Configuration et Lancement
 
