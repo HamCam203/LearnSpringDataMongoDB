@@ -8,7 +8,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.backend.faceSnaps.model.Face;
+import com.backend.faceSnaps.model.User;
 import com.backend.faceSnaps.repository.FaceSnapsRepository;
+import com.backend.faceSnaps.repository.UserRepository;
 
 @SpringBootApplication
 public class FaceSnapsApplication implements CommandLineRunner {
@@ -17,6 +19,8 @@ public class FaceSnapsApplication implements CommandLineRunner {
 
     @Autowired
     private FaceSnapsRepository faceSnapsRepository;
+    @Autowired
+    private UserRepository userRepository; // Assurez-vous d'avoir un UserRepository
 
     public static void main(String[] args) {
         SpringApplication.run(FaceSnapsApplication.class, args);
@@ -31,5 +35,10 @@ public class FaceSnapsApplication implements CommandLineRunner {
 
         // Afficher les titres des FaceSnaps
         allFaceSnaps.forEach(faceSnap -> logger.info(faceSnap.getTitle()));
+
+        // afficher tous les utilisateurs
+        List<User> allUsers = userRepository.findAll();
+        allUsers.forEach(user -> logger.info(user.getUsername()));
+        
     }
 }
